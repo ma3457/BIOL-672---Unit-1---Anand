@@ -1,0 +1,48 @@
+# MayaAnand_unit1_BIOL672.r
+# Operating system : macOS Ventura Version 13.6.9
+# install ggplot2 and plotly
+install.packages ("ggplot2")
+install.packages("plotly")
+
+# Load necessary libraries
+library(ggplot2)
+library(plotly)
+
+# Generate 5000 random numbers from a normal distribution
+data <- rnorm(5000) 
+
+# Calculate sample mean and sd
+sample_mean <- mean(data)
+sample_sd <- sd(data)
+
+# Use 'sink()' to print the output of the file to 'desc.txt'
+sink("desc.txt")
+cat("Sample Mean:", sample_mean, "\n") # Print sample mean and standard deviation 
+cat("Sample Standard Deviation:", sample_sd, "\n")
+sink() # Stop sinking to the file 
+
+# Create a ggplot histogram with density line and normal curve overlaid
+p <- ggplot(data.frame(data), aes(x = data)) +
+  geom_histogram(aes(y = ..density..), bins = 30, color = "black", fill = "lightblue") +
+  geom_density(color = "red", size = 1) +
+  stat_function(fun = dnorm, args = list(mean = sample_mean, sd = sample_sd), color = "blue", size = 1, linetype = "dashed") +
+  ggtitle(paste("Normal Distribution\nSample Mean:", round(sample_mean, 4), "Sample SD:", round(sample_sd, 4))) +
+  xlab("Random Numbers") +
+  ylab("Density") +
+  theme_minimal()
+# Save the plot to 'Rplots.pdf'
+ggsave("Rplots.pdf", plot = p)
+
+#Rename 'Rplots.pdf to 'histo.pdf'
+file.rename("Rplots.pdf", "histo.pdf")
+
+# Confirmation message
+cat("Mean and SD saved to 'desc.txt', and plot saved to 'histo.pdf'.\n")
+
+# Display plot
+print(p)
+
+# Make the plot interactive 
+interactive_plot <-ggplotly(p)
+interactive_plot
+
