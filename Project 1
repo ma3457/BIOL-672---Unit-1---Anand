@@ -1,8 +1,6 @@
 # MayaAnand_unit1_BIOL672.r
 # Operating system : macOS Ventura Version 13.6.9
 # install ggplot2 and plotly
-install.packages ("ggplot2")
-install.packages("plotly")
 
 # Load necessary libraries
 library(ggplot2)
