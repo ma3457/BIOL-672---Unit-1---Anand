@@ -148,7 +148,6 @@ ggsave("error_bar_chart.pdf", plot = p)
 # Scatterplot for Pearson correlation 
 p1 <- ggplot(data.frame(group1_values, group2_values), aes(x = group1_values, y = group2_values)) +
   geom_point( color = "blue") +
-  geom_smooth(method = "lm", se = FALSE, color = "red") +
   ggtitle("Scatterplot of Group1 vs Group2 (pearson correlation)") +
   xlab("Group1 values") +
   ylab("Group2 values") +
@@ -160,7 +159,6 @@ ggsave("pearson_scatterplot.pdf", plot = p1)
 # Scatterplot for Spearman correlation 
 p2 <- ggplot(data.frame(group1_values, group2_values), aes(x = group1_values, y = group2_values)) +
   geom_point(color = "green") +
-  geom_smooth(method = "loess", se = FALSE, color = "red") +
   ggtitle("Scatterplot of Group1 vs Group2 (Spearman correlation)") +
   xlab("Group1 values")+
   ylab("Group2 values")+
@@ -309,3 +307,6 @@ sink() #stop redirecting
 cat( "MANOVA test results have been saved to 'manova_results_and_interpretation.txt'.\n")
 
 # step 9
+
+
+
