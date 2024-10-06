@@ -5,16 +5,12 @@
 # Load necessary libraries
 library(ggplot2)
 library(plotly)
+library(MASS)
 
-# For reproducibility 
-set.seed(123)
-
-# Generate 5000 random numbers from a normal distribution
-data <- rnorm(5000, mean = 0, sd = 1) 
-
-# Calculate sample mean and sd
-sample_mean <- mean(data)
-sample_sd <- sd(data)
+set.seed(123) # For reproducibility 
+data <- rnorm(5000, mean = 0, sd = 1) # Generate 5000 random numbers from a normal distribution
+sample_mean <- mean(data) #Calculate sample mean 
+sample_sd <- sd(data) #calculate sample sd
 
 # Use 'sink()' to print the output of the file to 'desc.txt'
 sink("desc.txt")
@@ -31,17 +27,10 @@ p <- ggplot(data.frame(data), aes(x = data)) +
   xlab("Random Numbers") +
   ylab("Density") +
   theme_minimal()
-# Save the plot to 'Rplots.pdf'
-ggsave("Rplots.pdf", plot = p)
-
-#Rename 'Rplots.pdf to 'histo.pdf'
-file.rename("Rplots.pdf", "histo.pdf")
-
-# Display plot
-print(p)
-
-# Make the plot interactive 
-interactive_plot <-ggplotly(p)
+ggsave("Rplots.pdf", plot = p) # Save the plot to 'Rplots.pdf'
+file.rename("Rplots.pdf", "histo.pdf") #Rename 'Rplots.pdf to 'histo.pdf'
+print(p) # Display plot
+interactive_plot <-ggplotly(p) # Make the plot interactive 
 interactive_plot
 
 # Oneway ANOVA test 
@@ -237,7 +226,6 @@ regression_plot <- ggplot(data.frame(group1_values, group2_values), aes(x= group
 ggsave("linear_regression_plot.pdf", plot = regression_plot)
 
 # Step 7
-library(MASS)
 set.seed(123) #for reproducibility
 
 # data set with 3 groups and 5 quantitative variables
@@ -307,6 +295,36 @@ sink() #stop redirecting
 cat( "MANOVA test results have been saved to 'manova_results_and_interpretation.txt'.\n")
 
 # step 9
+#perform multiple regression across all categories
+lm_all <- lm(Height ~ Length + Width + Mass + Density, data = multivariate_synthetic_data)
+summary(lm_all) #view summary
 
+#save summary of regression results to a text file 
+sink("multiple_regression_across_all_categories.txt") #start redirection
+cat("Multiple Regression Across all Categories: \n")
+print(summary(lm_all)) #print the regression summary to the file 
 
+#conduct regression within a single category
+group_A_data <- subset(multivariate_synthetic_data, Group == "A") # subset data to only include group A observations
+lm_group_A <- lm(Height ~ Length + Width + Mass + Density, data = group_A_data) #perform multiple regssion within group A
+summary(lm_group_A) # view summary of regression model for group A
 
+#Save the summary of regression results to a text file 
+sink("multiple_regresison_within_group_A.txt") #start redirection
+cat("Multiple Regression Within Group A: \n")
+cat("The multiple regression analysis was conducted to predict 'Height' based on 'Length', 'Width', 'Mass', and 'Density' within Group A only.\n")
+cat("The summary of the regression model shows the coefficients, standard errors, and p-values for each predictor within this group.\n")
+cat("Compare these results with the regression across all categories to see if the best predictor changes when focusing on a single group.\n")
+cat("Based on the p-values within Group A, identify the variable that has the strongest relationship with 'Height'.\n")
+sink()  # Stop redirection to file
+cat("The multiple regression results within Group A have been saved to 'multiple_regression_within_group_A.txt'.\n")
+
+#verbal interpretation
+cat("\nMANOVA and Multiple Regression Analysis Summary:\n")
+cat("1. MANOVA Analysis: The MANOVA results show whether there are significant differences in the multivariate means of the variables\n")
+cat("across the three groups. The results can be found in the summary printed above and in 'manova_results_and_interpretation.txt'.\n")
+cat("2. Regression Across All Categories: The results show how 'Height' is predicted by 'Length', 'Width', 'Mass', and 'Density' across the entire dataset.\n")
+cat("The variable with the smallest p-value is considered the best predictor. This result can be found in the summary printed above and in 'multiple_regression_across_all_categories.txt'.\n")
+cat("3. Regression Within Group A: The results show how 'Height' is predicted within 'Group A' only, which may differ from the results across all categories.\n")
+cat("Check the p-values in the regression summaries to identify the best predictor in each case.\n")
+cat("Results have been saved to 'manova_results_and_interpretation.txt', 'multiple_regression_across_all_categories.txt', and 'multiple_regression_within_group_A.txt'.\n")
